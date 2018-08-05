@@ -57,10 +57,79 @@ function getDeviceInfo(serial) {
   };
 }
 
+function getBrowsers(browserCode) {
+  var browsersData = [
+    {
+      name: 'Firefox Reality', 
+      code: 'fxr', 
+      package: 'org.mozilla.vrbrowser', 
+      launchCmd: 'adb shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity'
+    },
+    {
+      name: 'Chrome', 
+      code: 'chrome',
+      package: 'com.android.chrome', 
+      launchCmd: 'adb shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task',
+    },
+    {
+      name: 'Chrome Canary', 
+      code: 'canary',
+      package: 'com.chrome.canary', 
+      launchCmd: 'adb shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task',
+    },
+    {
+      name: 'Oculus Browser', 
+      code: 'oculus',
+      package: 'com.oculus.browser', 
+      launchCmd: 'adb shell am start -n "com.oculus.vrshell/.MainActivity" -d apk://com.oculus.browser -e uri {URL}',
+    }
+  ];
+
+  if (typeof browserCode !== 'undefined') {
+    browsersData = browsersData.filter(browser => browser.code === browserCode);
+  }
+
+  var browserList = [];
+
+  browsersData.forEach(browserData => {
+    var packageVersions = getPackageVersions(null, browserData.package)
+      .sort((a,b) => a.versionCode < b.versionCode)
+      .map((info, i) => {
+        info.code = browserData.code + (i > 0 ? info.versionName.split('.')[0] : '');
+        return Object.assign({}, browserData, info); 
+      });
+      browserList = browserList.concat(packageVersions);
+  });
+
+  return browserList;
+}
+
+
+function getPackageVersions(serial, package) {
+  var output = getPackageInfo(serial, package);
+  var result = [];
+
+  if (output.trim().length) {
+    const re = /versionCode=(\d+).+\n.+versionName=(.+)/gmi;
+    while (res = re.exec(output)) {
+      const versionCode = res[1];
+      const versionName = res[2];
+
+      result.push({
+        versionCode: versionCode,
+        versionName: versionName
+      });
+    }
+  }
+  return result;
+}
+
 module.exports = {
   getDevices: getDevices,
   getDeviceProps: getDeviceProps,
   getDeviceInfo: getDeviceInfo,
   getPackages: getPackages,
-  getPackageInfo: getPackageInfo
+  getPackageInfo: getPackageInfo,
+  getPackageVersions: getPackageVersions,
+  getBrowsers: getBrowsers
 };
