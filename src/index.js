@@ -104,6 +104,15 @@ function getBrowsers(browserCode) {
   return browserList;
 }
 
+function launchUrl(url, selectedBrowser) {
+  var browser = typeof selectedBrowser === 'undefined' ? getBrowsers()[0] : getBrowsers(selectedBrowser);
+  if (!browser) {
+    console.log("No browser found");
+    return;
+  }
+  
+  const output = shell.exec(browser.launchCmd.replace('{URL}', url, options));
+}
 
 function getPackageVersions(serial, package) {
   var output = getPackageInfo(serial, package);
@@ -131,5 +140,6 @@ module.exports = {
   getPackages: getPackages,
   getPackageInfo: getPackageInfo,
   getPackageVersions: getPackageVersions,
-  getBrowsers: getBrowsers
+  getBrowsers: getBrowsers,
+  launchUrl: launchUrl
 };
