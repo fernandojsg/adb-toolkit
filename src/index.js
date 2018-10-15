@@ -81,7 +81,7 @@ function getBrowsers(browserCode) {
       name: 'Oculus Browser', 
       code: 'oculus',
       package: 'com.oculus.browser', 
-      launchCmd: 'adb shell am start -n "com.oculus.vrshell/.MainActivity" -d apk://com.oculus.browser -e uri {URL}',
+      launchCmd: 'adb shell am start -n "com.oculus.vrshell/.MainActivity" -d apk://com.oculus.browser -e uri "{URL}"',
     }
   ];
 
