@@ -107,7 +107,7 @@ function getBrowsers(browserCode) {
 function launchUrl(url, selectedBrowser) {
   var browser = typeof selectedBrowser === 'undefined' ? getBrowsers()[0] : getBrowsers(selectedBrowser);
   if (!browser) {
-    console.log("No browser found");
+    console.log('No browser found');
     return;
   }
   
