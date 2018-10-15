@@ -63,7 +63,8 @@ function getBrowsers(browserCode) {
       name: 'Firefox Reality', 
       code: 'fxr', 
       package: 'org.mozilla.vrbrowser', 
-      launchCmd: 'adb shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity'
+      //launchCmd: 'adb shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity'
+      launchCmd: 'adb shell am start -n org.mozilla.vrbrowser/.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false'
     },
     {
       name: 'Chrome', 
@@ -105,13 +106,13 @@ function getBrowsers(browserCode) {
 }
 
 function launchUrl(url, selectedBrowser) {
-  var browser = typeof selectedBrowser === 'undefined' ? getBrowsers()[0] : getBrowsers(selectedBrowser);
+  var browser = typeof selectedBrowser === 'undefined' ? getBrowsers()[0] : getBrowsers(selectedBrowser)[0];
   if (!browser) {
     console.log('No browser found');
     return;
   }
-  
-  const output = shell.exec(browser.launchCmd.replace('{URL}', url, options));
+  var cmd = browser.launchCmd.replace('{URL}', url).replace(/&/gi, '\&');
+  const output = shell.exec(cmd, options);
 }
 
 function getPackageVersions(serial, package) {
@@ -133,6 +134,10 @@ function getPackageVersions(serial, package) {
   return result;
 }
 
+function forceStop(package) {
+  const output = shell.exec(`adb shell am force-stop ${package}`);
+}
+
 module.exports = {
   getDevices: getDevices,
   getDeviceProps: getDeviceProps,
@@ -141,5 +146,6 @@ module.exports = {
   getPackageInfo: getPackageInfo,
   getPackageVersions: getPackageVersions,
   getBrowsers: getBrowsers,
-  launchUrl: launchUrl
+  launchUrl: launchUrl,
+  forceStop: forceStop
 };
