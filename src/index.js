@@ -111,7 +111,9 @@ function launchUrl(url, selectedBrowser) {
     console.log('No browser found');
     return;
   }
-  var cmd = browser.launchCmd.replace('{URL}', url).replace(/&/gi, '\&');
+
+  var cmd = browser.launchCmd.replace('{URL}', url.replace(/&/gi, '\\&'));
+  console.log('Command: ', cmd);
   const output = shell.exec(cmd, options);
 }
 
@@ -134,8 +136,8 @@ function getPackageVersions(serial, package) {
   return result;
 }
 
-function forceStop(package) {
-  const output = shell.exec(`adb shell am force-stop ${package}`);
+function forceStop(package, callback) {
+  const output = shell.exec(`adb shell am force-stop ${package}`, {}, callback);
 }
 
 module.exports = {
