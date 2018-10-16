@@ -76,7 +76,7 @@ function getBrowsers(browserCode) {
       name: 'Chrome Canary', 
       code: 'canary',
       package: 'com.chrome.canary', 
-      launchCmd: 'adb shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task',
+      launchCmd: 'adb shell am start -n com.android.canary/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task',
     },
     {
       name: 'Oculus Browser', 
