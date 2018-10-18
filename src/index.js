@@ -88,13 +88,13 @@ ADBDevice.prototype = {
         name: 'Chrome', 
         code: 'chrome',
         package: 'com.android.chrome', 
-        launchCmd: `${adb} -s ${this.serial} shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task`
+        launchCmd: `${adb} -s ${this.serial} shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task -c com.google.intent.category.DAYDREAM`
       },
       {
         name: 'Chrome Canary', 
         code: 'canary',
         package: 'com.chrome.canary', 
-        launchCmd: `${adb} -s ${this.serial} shell am start -n com.android.canary/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task`
+        launchCmd: `${adb} -s ${this.serial} shell am start -n com.chrome.canary/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task -c com.google.intent.category.DAYDREAM`
       },
       {
         name: 'Oculus Browser', 
@@ -112,12 +112,10 @@ ADBDevice.prototype = {
   
     browsersData.forEach(browserData => {
       var packageVersions = this.getPackageVersions(browserData.package)
-        .sort((a,b) => a.versionCode < b.versionCode)
-        .map((info, i) => {
-          info.code = browserData.code + (i > 0 ? info.versionName.split('.')[0] : '');
-          return Object.assign({}, browserData, info); 
-        });
-        browserList = browserList.concat(packageVersions);
+        .sort((a,b) => a.versionCode < b.versionCode);
+      if (packageVersions.length !== 0) {
+        browserList.push(Object.assign({}, browserData, packageVersions[0]));
+      }
     });
   
     return browserList;
@@ -125,12 +123,11 @@ ADBDevice.prototype = {
   launchUrl: function(url, selectedBrowser) {
     var browser = typeof selectedBrowser === 'undefined' ? this.getBrowsers()[0] : this.getBrowsers(selectedBrowser)[0];
     if (!browser) {
-      console.log('No browser found');
-      return;
+      // console.log('No browser found');
+      return false;
     }
-  
     var cmd = browser.launchCmd.replace('{URL}', url.replace(/&/gi, '\\&'));
-    console.log('Command: ', cmd);
+    // console.log('Command: ', cmd);
     const output = shell.exec(cmd, options);
   },
   forceStop: function(package, callback) {
