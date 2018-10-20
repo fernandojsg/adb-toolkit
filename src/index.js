@@ -127,7 +127,6 @@ ADBDevice.prototype = {
       return false;
     }
     var cmd = browser.launchCmd.replace('{URL}', url.replace(/&/gi, '\\&'));
-    // console.log('Command: ', cmd);
     const output = shell.exec(cmd, options);
   },
   forceStop: function(package, callback) {
