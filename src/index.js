@@ -123,6 +123,9 @@ ADBDevice.prototype = {
   installPackage: function(packageFilename, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} install ${packageFilename}`, {}, callback);
   },
+  uninstallPackage: function(packageName) {
+    const output = shell.exec(`${adb} -s ${this.serial} uninstall ${packageName}`, {}, callback);
+  },
   launchUrl: function(url, selectedBrowser) {
     var browser = typeof selectedBrowser === 'undefined' ? this.getBrowsers()[0] : this.getBrowsers(selectedBrowser)[0];
     if (!browser) {
