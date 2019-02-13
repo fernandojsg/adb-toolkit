@@ -120,6 +120,9 @@ ADBDevice.prototype = {
   
     return browserList;
   },
+  installPackage: function(packageFilename, callback) {
+    const output = shell.exec(`${adb} -s ${this.serial} install ${packageFilename}`, {}, callback);
+  },
   launchUrl: function(url, selectedBrowser) {
     var browser = typeof selectedBrowser === 'undefined' ? this.getBrowsers()[0] : this.getBrowsers(selectedBrowser)[0];
     if (!browser) {
