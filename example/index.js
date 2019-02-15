@@ -10,6 +10,7 @@ devices.forEach(device => {
   console.log(device.getPackageVersions('com.android.chrome'));
   console.log(device.getDeviceProps());
   console.log(device.getPackages());
+  console.log(device.existPackage('org.mozilla.vrbrowser'));
   console.log(device.getPackageInfo('org.mozilla.vrbrowser'));
   console.log('Browsers', device.getBrowsers());
   

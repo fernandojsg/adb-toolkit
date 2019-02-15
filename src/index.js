@@ -124,6 +124,9 @@ ADBDevice.prototype = {
   
     return browserList;
   },
+  existPackage: function(packageFilename) {
+    return shell.exec(`${adb} -s ${this.serial} shell pm list packages|grep ${packageFilename}`).trim().length > 0;
+  },
   installPackage: function(packageFilename, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} install ${packageFilename}`, {}, callback);
   },
