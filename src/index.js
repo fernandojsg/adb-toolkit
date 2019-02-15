@@ -1,9 +1,13 @@
 const shell = require('shelljs');
 
 const adb = 'adb';
-const options = {silent: true};
+var options = {silent: true};
 
-function getDevices() {
+function getDevices(opt) {
+  if (typeof opt !== 'undefined') {
+    options = opt;
+  }
+
   var adbDevices = shell.exec(`${adb} devices -l`, options).stdout.trim().split('\n');
   adbDevices.shift();
   var devices = [];
@@ -126,15 +130,19 @@ ADBDevice.prototype = {
   uninstallPackage: function(packageName, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} uninstall ${packageName}`, {}, callback);
   },
-  launchUrl: function(url, selectedBrowser, addOptions) {
+  launchUrl: function(url, selectedBrowser) {
     var browser = typeof selectedBrowser === 'undefined' ? this.getBrowsers()[0] : this.getBrowsers(selectedBrowser)[0];
     if (!browser) {
       // console.log('No browser found');
       return false;
     }
-    var cmd = browser.launchCmd.replace('{URL}', url.replace(/&/gi, '\\&'));
-    var opt = typeof addOptions !== 'undefined' ? addOptions : options;
-    const output = shell.exec(cmd, opt);
+    url = url.replace(/\(/gi, '%28');
+    url = url.replace(/\)/gi, '%29');
+    url = encodeURIComponent(url);
+
+    var cmd = browser.launchCmd.replace('{URL}', url);
+
+    const output = shell.exec(cmd, options);
   },
   forceStop: function(package, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} shell am force-stop ${package}`, {}, callback);
