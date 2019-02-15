@@ -136,9 +136,6 @@ ADBDevice.prototype = {
       // console.log('No browser found');
       return false;
     }
-    url = url.replace(/\(/gi, '%28');
-    url = url.replace(/\)/gi, '%29');
-    url = encodeURIComponent(url);
 
     var cmd = browser.launchCmd.replace('{URL}', url);
 
