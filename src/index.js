@@ -133,14 +133,14 @@ ADBDevice.prototype = {
   uninstallPackage: function(packageName, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} uninstall ${packageName}`, {}, callback);
   },
-  launchUrl: function(url, selectedBrowser) {
+  launchUrl: function(url, selectedBrowser, extraParams) {
     var browser = typeof selectedBrowser === 'undefined' ? this.getBrowsers()[0] : this.getBrowsers(selectedBrowser)[0];
     if (!browser) {
       // console.log('No browser found');
       return false;
     }
 
-    var cmd = browser.launchCmd.replace('{URL}', url);
+    var cmd = browser.launchCmd.replace('{URL}', url) + extraParams ? extraParams : '';
 
     const output = shell.exec(cmd, options);
   },
