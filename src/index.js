@@ -140,7 +140,11 @@ ADBDevice.prototype = {
       return false;
     }
 
-    var cmd = browser.launchCmd.replace('{URL}', url) + extraParams ? extraParams : '';
+    //var cmd = browser.launchCmd.replace('{URL}', url) + (extraParams ? extraParams : '');
+    var cmd = browser.launchCmd.replace('{URL}', url) + (extraParams ? extraParams : '');
+    if (options.debug) {
+      console.log('shell.exec: ', cmd);
+    }
 
     const output = shell.exec(cmd, options);
   },
