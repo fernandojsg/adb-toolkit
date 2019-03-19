@@ -46,7 +46,7 @@ ADBDevice.prototype = {
     var result = [];
   
     if (output.trim().length) {
-      const re = /versionCode=(\d+).+\n.+versionName=(.+)/gmi;
+      const re = /versionCode=(\d+).+[\s\S]+.+versionName=(.+)/gmi;
       while (res = re.exec(output)) {
         const versionCode = res[1];
         const versionName = res[2];
