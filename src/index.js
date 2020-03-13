@@ -13,9 +13,17 @@ function getDevices(opt) {
   var devices = [];
   
   adbDevices.forEach(line => {
-    const re =/([^\s]+).+device .+model:([^\s]+)\s/gi;
-    var result = re.exec(line);
-    devices.push(new ADBDevice(result[1], result[2]));
+    if (line.includes("unauthorized")) {
+      const re =/([^\s]+).+unauthorized\s/gi;
+      var result = re.exec(line);
+      console.warn(`!!! Device unauthorized: ${result[1]}`);
+
+      // @todo
+    } else {
+      const re =/([^\s]+).+device .+model:([^\s]+)\s/gi;
+      var result = re.exec(line);
+      devices.push(new ADBDevice(result[1], result[2]));
+    }
   });
   return devices;
 }
