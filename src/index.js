@@ -90,14 +90,21 @@ ADBDevice.prototype = {
   getBrowsers: function(browserCode) {
     var browsersData = [
       {
-        name: 'Firefox Reality', 
-        code: 'fxr', 
-        package: 'org.mozilla.vrbrowser', 
+        name: 'Firefox Reality',
+        code: 'fxr',
+        package: 'org.mozilla.vrbrowser',
         //launchCmd: `${adb} -s ${this.serial} shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity`
         launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.vrbrowser/.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
       },
       {
-        name: 'Chrome', 
+        name: 'Firefox Reality Dev',
+        code: 'fxrd',
+        package: 'org.mozilla.vrbrowser.dev',
+        //launchCmd: `${adb} -s ${this.serial} shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity`
+        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.vrbrowser.dev/.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
+      },
+      {
+        name: 'Chrome',
         code: 'chrome',
         package: 'com.android.chrome', 
         launchCmd: `${adb} -s ${this.serial} shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task -c com.google.intent.category.DAYDREAM`
