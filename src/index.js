@@ -52,7 +52,7 @@ ADBDevice.prototype = {
   getPackageVersions: function(package) {
     var output = this.getPackageInfo(package);
     var result = [];
-  
+
     if (output.trim().length) {
       const re = /versionCode=(\d+).+[\s\S]+.+versionName=(.+)/gmi;
       while (res = re.exec(output)) {
@@ -94,29 +94,30 @@ ADBDevice.prototype = {
         code: 'fxr',
         package: 'org.mozilla.vrbrowser',
         //launchCmd: `${adb} -s ${this.serial} shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity`
-        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.vrbrowser/.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
+        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
       },
       {
         name: 'Firefox Reality Dev',
         code: 'fxrd',
         package: 'org.mozilla.vrbrowser.dev',
         //launchCmd: `${adb} -s ${this.serial} shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser/org.mozilla.vrbrowser.VRBrowserActivity`
-        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.vrbrowser.dev/.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
+        //launchCmd: `${adb} -s ${this.serial} shell am start -a android.intent.action.VIEW -d "{URL}" org.mozilla.vrbrowser.dev/org.mozilla.vrbrowser.VRBrowserActivity --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
+        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.vrbrowser.dev/org.mozilla.vrbrowser.VRBrowserActivity --es url "{URL}" --ez dom.vr.require-gesture false --ez privacy.reduceTimerPrecision false`
       },
       {
         name: 'Chrome',
         code: 'chrome',
-        package: 'com.android.chrome', 
+        package: 'com.android.chrome',
         launchCmd: `${adb} -s ${this.serial} shell am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task -c com.google.intent.category.DAYDREAM`
       },
       {
-        name: 'Chrome Canary', 
+        name: 'Chrome Canary',
         code: 'canary',
-        package: 'com.chrome.canary', 
+        package: 'com.chrome.canary',
         launchCmd: `${adb} -s ${this.serial} shell am start -n com.chrome.canary/org.chromium.chrome.browser.ChromeTabbedActivity -d "{URL}" --activity-clear-task -c com.google.intent.category.DAYDREAM`
       },
       {
-        name: 'Oculus Browser', 
+        name: 'Oculus Browser',
         code: 'oculus',
         package: 'com.oculus.browser', 
         launchCmd: `${adb} -s ${this.serial} shell am start -n "com.oculus.vrshell/.MainActivity" -d apk://com.oculus.browser -e uri "{URL}"`
@@ -128,7 +129,7 @@ ADBDevice.prototype = {
     }
   
     var browserList = [];
-  
+
     browsersData.forEach(browserData => {
       var packageVersions = this.getPackageVersions(browserData.package)
         .sort((a,b) => a.versionCode < b.versionCode);
