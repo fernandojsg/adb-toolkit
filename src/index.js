@@ -11,7 +11,7 @@ function getDevices(opt) {
   var adbDevices = shell.exec(`${adb} devices -l`, options).stdout.trim().split('\n');
   adbDevices.shift();
   var devices = [];
-  
+
   adbDevices.forEach(line => {
     if (line.includes("unauthorized")) {
       const re =/([^\s]+).+unauthorized\s/gi;
@@ -145,6 +145,9 @@ ADBDevice.prototype = {
   },
   installPackage: function(packageFilename, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} install ${packageFilename}`, {}, callback);
+  },
+  reversePorts: function(inPort, outPort, callback) {
+    const output = shell.exec(`${adb} -s ${this.serial} reverse tcp:${inPort} tcp:${outPort}`, {}, callback);
   },
   uninstallPackage: function(packageName, callback) {
     const output = shell.exec(`${adb} -s ${this.serial} uninstall ${packageName}`, {}, callback);
