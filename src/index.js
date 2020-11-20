@@ -90,6 +90,18 @@ ADBDevice.prototype = {
   getBrowsers: function(browserCode) {
     var browsersData = [
       {
+        name: 'Firefox',
+        code: 'firefox',
+        package: 'org.mozilla.firefox',
+        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.firefox/org.mozilla.gecko.BrowserApp -a android.intent.action.VIEW -d "{URL}"`
+      },
+      {
+        name: 'Firefox Nightly',
+        code: 'nightly',
+        package: 'org.mozilla.fenix',
+        launchCmd: `${adb} -s ${this.serial} shell am start -n org.mozilla.fenix/org.mozilla.gecko.BrowserApp -a android.intent.action.VIEW -d "{URL}"`
+      },
+      {
         name: 'Firefox Reality',
         code: 'fxr',
         package: 'org.mozilla.vrbrowser',
